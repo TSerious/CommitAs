@@ -4,6 +4,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:conv="using:CommitAs.Converters"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:m="using:CommitAs.Models"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:ui="using:FluentAvalonia.UI.Controls"
     xmlns:vm="using:CommitAs.ViewModels"
@@ -12,10 +13,6 @@
     x:DataType="vm:MainViewModel"
     mc:Ignorable="d">
     <Design.DataContext>
-        <!--
-            This only sets the DataContext for the previewer in an IDE,
-            to set the actual DataContext for runtime, set the DataContext property in code (look at App.axaml.cs)
-        -->
         <vm:MainViewModel />
     </Design.DataContext>
     <StackPanel>
@@ -24,14 +21,15 @@
             HorizontalAlignment="Stretch"
             VerticalAlignment="Center"
             IsEditable="True"
+            IsTextSearchEnabled="True"
             ItemsSource="{Binding Users}"
-            Text="{Binding}"
-            TextSubmitted="UserName_TextSubmitted">
+            Text="{Binding CurrentUser, Converter={x:Static conv:UserConverters.UserName}, Mode=OneWay}">
             <ui:FAComboBox.ItemTemplate>
-                <DataTemplate>
+                <DataTemplate x:DataType="m:User">
                     <TextBlock Text="{Binding ., Converter={x:Static conv:UserConverters.UserName}}" />
                 </DataTemplate>
             </ui:FAComboBox.ItemTemplate>
         </ui:FAComboBox>
+        <TextBox Height="50" />
     </StackPanel>
 </UserControl>
