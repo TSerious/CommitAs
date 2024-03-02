@@ -14,7 +14,7 @@ namespace CommitAs.ViewModels
 {
     public class MainViewModel : ViewModelBase, IActivatableViewModel
     {
-        private readonly ObservableCollection<User> users = [];
+        private readonly ObservableCollection<string> userNames = [];
 
         public MainViewModel() 
         {
@@ -30,13 +30,32 @@ namespace CommitAs.ViewModels
 
             if (this.Settings.Users != null)
             {
-                this.users.AddRange(this.Settings.Users);
+                this.userNames.AddRange(this.Settings.Users.Select(u => u.Name));
             }
+        }
+
+        public void SetCurrentUser(string userName)
+        {
+            if (this.Settings.Users == null)
+            {
+                this.CurrentUser = null;
+                return;
+            }
+
+            this.CurrentUser = this.Settings.Users.FirstOrDefault(u => u.Name == userName);
+        }
+
+        public bool WriteCurrentUserToGit()
+        {
+            return Git.WriteUserToGit(
+                this.Settings.Command,
+                this.CurrentUser.Name,
+                string.IsNullOrWhiteSpace(this.CurrentUser.Email) ? this.Settings.Email : this.CurrentUser.Email);
         }
 
         private void HandleActivation(CompositeDisposable disposables)
         {
-            Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(this.Users, nameof(this.Users.CollectionChanged))
+            Observable.FromEventPattern<NotifyCollectionChangedEventArgs>(this.UserNames, nameof(this.UserNames.CollectionChanged))
                 .Select(e => e.EventArgs)
                 .Subscribe(args => UpdateUsers(args))
                 .DisposeWith(disposables);
@@ -55,7 +74,7 @@ namespace CommitAs.ViewModels
                 return;
             }
 
-            if (!this.Users.Any())
+            if (!this.UserNames.Any())
             {
                 this.Settings.ClearUsers();
                 return;
@@ -67,9 +86,9 @@ namespace CommitAs.ViewModels
                 return;
             }
 
-            foreach (var user in args.NewItems)
+            foreach (string userName in args.NewItems)
             {
-                this.Settings.AddUser(user as User);
+                this.Settings.AddUser(new User(userName));
             }
         }
 
@@ -82,7 +101,7 @@ namespace CommitAs.ViewModels
 
         public Settings Settings { get; } = new Settings();
 
-        public ObservableCollection<User> Users => this.users;
+        public ObservableCollection<string> UserNames => this.userNames;
 
         [Reactive]
         public User? CurrentUser { get; set; }

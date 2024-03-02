@@ -80,5 +80,21 @@ namespace CommitAs.Models
             
             return insertIndex;
         }
+
+        public static int GetInsertIndex(IList<string> users, string newUser)
+        {
+            if (string.IsNullOrEmpty(newUser))
+            {
+                return 0;
+            }
+
+            int insertIndex = 0;
+            while (newUser.CompareTo(users[insertIndex]) > 0)
+            {
+                insertIndex++;
+            }
+
+            return insertIndex;
+        }
     }
 }

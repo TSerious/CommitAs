@@ -22,14 +22,7 @@
             VerticalAlignment="Center"
             IsEditable="True"
             IsTextSearchEnabled="True"
-            ItemsSource="{Binding Users}"
-            Text="{Binding CurrentUser, Converter={x:Static conv:UserConverters.UserName}, Mode=OneWay}">
-            <ui:FAComboBox.ItemTemplate>
-                <DataTemplate x:DataType="m:User">
-                    <TextBlock Text="{Binding ., Converter={x:Static conv:UserConverters.UserName}}" />
-                </DataTemplate>
-            </ui:FAComboBox.ItemTemplate>
-        </ui:FAComboBox>
+            ItemsSource="{Binding UserNames}" />
         <TextBox Height="50" />
     </StackPanel>
 </UserControl>

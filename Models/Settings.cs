@@ -37,6 +37,13 @@ namespace CommitAs.Models
                 this.AddUser(this.currentUser);
             }
 
+            var cmdSection = this.root.GetSection(nameof(this.Command));
+            if (cmdSection != null &&
+                !string.IsNullOrWhiteSpace(cmdSection.Value))
+            {
+                this.Command = cmdSection.Value;
+            }
+
             this.Save();
         }
 
@@ -71,6 +78,13 @@ namespace CommitAs.Models
                 this.Save();
             }
         }
+
+        public string? Command
+        {
+            get;
+        }
+
+        = "d: && cd d:\\CommitAs && git config user.name ";
 
         public void AddUser(User? user)
         {

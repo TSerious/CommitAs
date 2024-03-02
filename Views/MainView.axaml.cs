@@ -1,5 +1,6 @@
 using Avalonia;
 using Avalonia.Controls;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Input;
 using Avalonia.Markup.Xaml;
 using Avalonia.ReactiveUI;
@@ -22,31 +23,9 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
 
         this.WhenActivated(disposables =>
         {
-            this.UserName.WhenAnyValue(x => x.Text)
-                .Skip(1)
-                .Subscribe(_ => this.UpdateUserNamePlaceholderAndText())
-                .DisposeWith(disposables);
-
-            this.UserName.WhenAnyValue(x => x.SelectionBoxItem)
-                .Subscribe(item =>
-                {
-                    System.Diagnostics.Debug.WriteLine(item);
-
-                    if (item == null ||
-                        item is not User user)
-                    {
-                        this.UserName.Text = string.Empty;
-                        return;
-                    }
-
-                    this.UserName.Text = user.Name;
-                })
-                .DisposeWith(disposables);
-
-            Observable.FromEventPattern<KeyEventArgs>(this.UserName, nameof(this.UserName.KeyDown))
-                .Select(k => k.EventArgs.Key)
-                .Where(k => k == Key.Tab)
-                .Subscribe(_ => this.SelectMostSimularUserAsCurrent())
+            this.UserName.WhenAnyValue(x => x.SelectedIndex, x => x.SelectedItem)
+                .Skip(3)
+                .Subscribe(_ => this.SetCurrentUser())
                 .DisposeWith(disposables);
 
             Observable.FromEventPattern<KeyEventArgs>(this.UserName, nameof(this.UserName.KeyDown))
@@ -56,19 +35,17 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
             var k = new KeyBinding();
             k.Gesture = new KeyGesture(Key.Enter);
             k.Command = ReactiveCommand.Create(new Action(() => { 
-                
-                
                 this.SetCurrentUser();
             }));
             this.UserName.KeyBindings.Add(k);
 
+            /*
             Observable.FromEventPattern<KeyEventArgs>(this.UserName, nameof(this.UserName.KeyDown))
                 .Select(k => k.EventArgs.Key)
                 .Where(k => k == Key.Enter)
                 .Subscribe(_ => this.SetCurrentUser())
                 .DisposeWith(disposables);
-
-            this.UserName.IsTextSearchEnabled = true;
+            */
 
             /*
             Observable.FromEventPattern<EventArgs>(this.UserName, nameof(this.UserName.GotFocus))
@@ -111,6 +88,7 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
 
     private void UpdateUserNamePlaceholderAndText()
     {
+        /*
         var user = this.GetMostSimilarUser(this.UserName.Text);
         
         if (user == null &&
@@ -132,6 +110,7 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
         }
         
         //this.UserName.Text = user.Name[..this.UserName.Text.Length];
+        */
     }
 
     private User? GetMostSimilarUser(string name)
@@ -146,26 +125,13 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
 
     private void SelectMostSimularUserAsCurrent()
     {
-        var user = this.GetMostSimilarUser(this.UserName.Text);
-
-        if (user == null)
-        {
-            this.UserName.Text = string.Empty;
-            this.ViewModel.CurrentUser = user;
-            return;
-        }
-
-        this.UserName.PlaceholderText = string.Empty;
-        this.UserName.Text = user.Name;
-
-        if (this.ViewModel == null)
+        if (this.ViewModel == null ||
+            this.ViewModel.CurrentUser == null)
         {
             return;
         }
 
-        //this.UserName.SelectedValue = user;
-        this.ViewModel.CurrentUser = user;
-        this.UserName.SelectedIndex = this.UserName.Items.IndexOf(user);
+        this.UserName.SelectedIndex = this.ViewModel.UserNames.IndexOf(this.ViewModel.CurrentUser.Name);
     }
 
     private void SetCurrentUser()
@@ -176,15 +142,34 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
             return;
         }
 
-        var user = this.ViewModel.Users.FirstOrDefault(u => u.Name.Equals(this.UserName.Text));
+        string? user = this.ViewModel.UserNames.FirstOrDefault(u => u.Equals(this.UserName.SelectedItem));
 
         if (user == null)
         {
-            user = new User(this.UserName.Text);
-            this.ViewModel.Users.Insert(User.GetInsertIndex(this.ViewModel.Users, user), user);
+            user = this.UserName.Text;
+            this.ViewModel.SetCurrentUser(user);
+            this.WriteAndShutdown();
+            return;
         }
 
-        this.ViewModel.CurrentUser = user;
+        this.ViewModel.SetCurrentUser(user);
         this.UserName.SelectedIndex = this.UserName.Items.IndexOf(user);
+        this.UserName.SelectedValue = this.UserName.SelectedItem;
+        this.WriteAndShutdown();
+    }
+
+    private void WriteAndShutdown()
+    {
+        if (this.ViewModel == null)
+        {
+            return;
+        }
+
+        bool ok = this.ViewModel.WriteCurrentUserToGit();
+
+        if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopApp)
+        {
+            desktopApp.Shutdown(ok ? 0 : -1);
+        }
     }
 }
