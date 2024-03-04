@@ -169,7 +169,7 @@ public partial class MainView : ReactiveUserControl<MainViewModel>
 
         if (Application.Current?.ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktopApp)
         {
-            desktopApp.Shutdown(ok ? 0 : -1);
+            desktopApp.Shutdown(ok ? 10 : 0);
         }
     }
 }

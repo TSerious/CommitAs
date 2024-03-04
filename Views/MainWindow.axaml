@@ -6,10 +6,13 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:views="using:CommitAs.Views"
     Title="CommitAs"
-    d:DesignHeight="450"
-    d:DesignWidth="800"
+    Width="300"
+	Height="500"
+    VerticalAlignment="Center"
     x:CompileBindings="True"
-    Icon="/Assets/avalonia-logo.ico"
+    Icon="/Assets/Icon.ico"
+    SizeToContent="Height"
+    WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
-    <views:MainView />
+    <views:MainView x:Name="mainView" />
 </Window>

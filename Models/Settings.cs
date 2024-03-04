@@ -1,12 +1,15 @@
-﻿using Microsoft.Extensions.Configuration;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text.Json;
+using Microsoft.Extensions.Configuration;
 
 namespace CommitAs.Models
 {
+    /// <summary>
+    /// Stores the settings of the application.
+    /// </summary>
     public class Settings
     {
         private const string SettingsFile = "config.json";
@@ -15,6 +18,9 @@ namespace CommitAs.Models
         private string? email;
         private User? currentUser;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="Settings"/> class.
+        /// </summary>
         public Settings()
         {
             this.root = new ConfigurationBuilder()
@@ -22,7 +28,9 @@ namespace CommitAs.Models
                 .AddJsonFile(SettingsFile, true, false)
                 .Build();
 
-            this.users = this.root.GetSection(nameof(this.Users)).Get<List<User>>(); 
+#pragma warning disable CS8601 // Possible null reference assignment.
+            this.users = this.root.GetSection(nameof(this.Users)).Get<List<User>>();
+#pragma warning restore CS8601 // Possible null reference assignment.
             this.users ??= [];
             this.users = this.users.Distinct().ToList();
             this.users.Sort();
@@ -43,14 +51,29 @@ namespace CommitAs.Models
             {
                 this.Command = cmdSection.Value;
             }
+            else if (!string.IsNullOrEmpty(Environment.CurrentDirectory) &&
+                     Path.GetPathRoot(Environment.CurrentDirectory) is string drive)
+            {
+                drive = drive[..2];
+                var dir = Path.GetFullPath(Environment.CurrentDirectory + "\\..");
+                this.Command = $"{drive} \u0026\u0026 cd \"{dir}\" \u0026\u0026 git config user.name ";
+            }
 
             this.Save();
         }
 
+        /// <summary>
+        /// Gets all users.
+        /// </summary>
         public IReadOnlyList<User>? Users => this.users;
 
-        public string? Email 
-        { 
+        /// <summary>
+        /// Gets or sets the currently used email.
+        /// If this and the <see cref="User.Email"/> of <see cref="CurrentUser"/>
+        /// are empty the user.email field of git will not be changed.
+        /// </summary>
+        public string? Email
+        {
             get => this.email;
             set
             {
@@ -64,6 +87,9 @@ namespace CommitAs.Models
             }
         }
 
+        /// <summary>
+        /// Gets or sets the current user.
+        /// </summary>
         public User? CurrentUser
         {
             get => this.currentUser;
@@ -79,13 +105,20 @@ namespace CommitAs.Models
             }
         }
 
+        /// <summary>
+        /// Gets the Command that is executed to change the user name.
+        /// </summary>
         public string? Command
         {
             get;
         }
 
-        = "d: && cd d:\\CommitAs && git config user.name ";
+        = string.Empty;
 
+        /// <summary>
+        /// Adds a user.
+        /// </summary>
+        /// <param name="user">The user.</param>
         public void AddUser(User? user)
         {
             if (user == null ||
@@ -99,6 +132,9 @@ namespace CommitAs.Models
             this.Save();
         }
 
+        /// <summary>
+        /// Removes all users.
+        /// </summary>
         public void ClearUsers()
         {
             this.users.Clear();
