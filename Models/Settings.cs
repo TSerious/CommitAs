@@ -31,7 +31,9 @@ namespace CommitAs.Models
 #pragma warning disable CS8601 // Possible null reference assignment.
             this.users = this.root.GetSection(nameof(this.Users)).Get<List<User>>();
 #pragma warning restore CS8601 // Possible null reference assignment.
+#pragma warning disable SA1010 // Opening square brackets should be spaced correctly
             this.users ??= [];
+#pragma warning restore SA1010 // Opening square brackets should be spaced correctly
             this.users = this.users.Distinct().ToList();
             this.users.Sort();
 
