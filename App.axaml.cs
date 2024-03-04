@@ -1,17 +1,29 @@
 using Avalonia;
+using Avalonia.Controls.ApplicationLifetimes;
 using Avalonia.Markup.Xaml;
+using CommitAs.ViewModels;
+using CommitAs.Views;
 
 namespace CommitAs
 {
-    /// <summary>
-    /// The app allows to quickly change the user of a git repository.
-    /// </summary>
     public partial class App : Application
     {
-        /// <inheritdoc/>
         public override void Initialize()
         {
             AvaloniaXamlLoader.Load(this);
+        }
+
+        public override void OnFrameworkInitializationCompleted()
+        {
+            if (ApplicationLifetime is IClassicDesktopStyleApplicationLifetime desktop)
+            {
+                desktop.MainWindow = new MainWindow
+                {
+                    DataContext = new MainViewModel(),
+                };
+            }
+
+            base.OnFrameworkInitializationCompleted();
         }
     }
 }

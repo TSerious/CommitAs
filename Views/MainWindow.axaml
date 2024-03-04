@@ -10,7 +10,7 @@
 	Height="500"
     VerticalAlignment="Center"
     x:CompileBindings="True"
-    Icon="/Assets/Icon.ico"
+    Icon="/Assets/avalonia-logo.ico"
     SizeToContent="Height"
     WindowStartupLocation="CenterScreen"
     mc:Ignorable="d">
