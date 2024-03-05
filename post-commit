@@ -1,0 +1,19 @@
+#!/bin/bash
+
+if ! [ -e _CommitAsTempFile_ ]; then
+    echo "Nothing to do after commit."
+    exit 0
+fi
+
+rm _CommitAsTempFile_
+echo "Changing author of last commit..."
+./CommitAS/PostCommitAs.exe
+exitCode=$?
+
+if [ $exitCode -eq 0 ]; then
+    echo "User of last commit changed successfully."
+else
+    echo "Couldn't change user of last commit!"
+fi
+
+exit $exitCode

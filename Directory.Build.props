@@ -1,0 +1,11 @@
+﻿<Project>
+	<PropertyGroup>
+		<ProductName>$(SolutionName)</ProductName>
+		<Product>$(SolutionName)</Product>
+		<Title>$(SolutionName)</Title>
+		<Authors>Tobias Ernst</Authors>
+		<Version>1.0.0.3</Version>
+		<FileVersion>1.0.0.3</FileVersion>
+		<InformationalVersion>1.0.0.3</InformationalVersion>
+	</PropertyGroup>
+</Project>
