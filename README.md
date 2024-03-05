@@ -22,7 +22,7 @@ This file is deleted by the *post-commit* hook. Which then also executes *PostCo
 __Configure your repository to use *ssl* for push and pull operations.__
 
 Your repository contains a hidden folder ```.git```.
-To use the tool download and extract the latest release into the root folder of any repository into the folder ```CommitAs``` and add this folder to your ````.gitignore```.
+To use the tool download and extract the latest release into the root folder of any repository into the folder ```CommitAs``` and add this folder to your ```.gitignore```.
 The resulting folder structure should be:
 ```
 .
