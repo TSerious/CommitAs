@@ -6,10 +6,25 @@
     <BuiltInComInteropSupport>true</BuiltInComInteropSupport>
     <ApplicationManifest>app.manifest</ApplicationManifest>
     <AvaloniaUseCompiledBindingsByDefault>true</AvaloniaUseCompiledBindingsByDefault>
+    <ApplicationIcon>Assets\Icon.ico</ApplicationIcon>
+    <Product>$(SolutionName)</Product>
   </PropertyGroup>
 
   <ItemGroup>
     <AvaloniaResource Include="Assets\**" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Assets\Icon.ico" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\post-commit" Link="hooks\post-commit">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Include="..\pre-commit" Link="hooks\pre-commit">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
   </ItemGroup>
 
 
@@ -35,8 +50,19 @@
 
 
   <ItemGroup>
+    <ProjectReference Include="..\CommitAs.Core\CommitAs.Core.csproj" />
+    <ProjectReference Include="..\PostCommitAs\PostCommitAs.csproj" />
+  </ItemGroup>
+
+
+  <ItemGroup>
     <AvaloniaResource Update="Assets\Icon.ico">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </AvaloniaResource>
+  </ItemGroup>
+
+
+  <ItemGroup>
+    <Folder Include="hooks\" />
   </ItemGroup>
 </Project>

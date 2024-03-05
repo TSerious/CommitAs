@@ -1,3 +1,10 @@
 /.vs
 /bin
 /obj
+/CommitAs.Core/bin
+/CommitAs.Core/obj
+/CommitAs/bin
+/CommitAs/obj
+/PostCommitAs/bin
+/PostCommitAs/obj
+/publish/

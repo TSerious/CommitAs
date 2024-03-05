@@ -1,11 +1,12 @@
-﻿using Avalonia;
-using Avalonia.ReactiveUI;
-using CommitAs.Models;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
-using System;
-
-namespace CommitAs
+﻿namespace CommitAs
 {
+    using System;
+    using Avalonia;
+    using Avalonia.ReactiveUI;
+
+    /// <summary>
+    /// The main program.
+    /// </summary>
     internal sealed class Program
     {
         // Initialization code. Don't use any Avalonia, third-party APIs or any

@@ -1,0 +1,15 @@
+#!/bin/bash
+
+./CommitAS/CommitAs.exe
+exitCode=$?
+
+echo $exitCode
+# Check if the user was set by CommitAs.exe.
+if [ $exitCode -eq 0 ]; then
+    touch _CommitAsTempFile_
+    echo "User selected."
+else
+    echo "No user selected!"
+fi
+
+exit $exitCode

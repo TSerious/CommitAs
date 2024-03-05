@@ -1,23 +1,25 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.Collections.Specialized;
-using System.Linq;
-using System.Reactive.Disposables;
-using System.Reactive.Linq;
-using CommitAs.Models;
-using DynamicData;
-using ReactiveUI;
-using ReactiveUI.Fody.Helpers;
-
-namespace CommitAs.ViewModels
+﻿namespace CommitAs.ViewModels
 {
+    using System;
+    using System.Collections.Generic;
+    using System.Collections.ObjectModel;
+    using System.Collections.Specialized;
+    using System.Linq;
+    using System.Reactive.Disposables;
+    using System.Reactive.Linq;
+    using CommitAs.Core.Models;
+    using DynamicData;
+    using ReactiveUI;
+    using ReactiveUI.Fody.Helpers;
+
     /// <summary>
     /// The model for the main view.
     /// </summary>
     public class MainViewModel : ViewModelBase, IActivatableViewModel
     {
+#pragma warning disable SA1010 // Opening square brackets should be spaced correctly
         private readonly ObservableCollection<string> userNames = [];
+#pragma warning restore SA1010 // Opening square brackets should be spaced correctly
 
         /// <summary>
         /// Initializes a new instance of the <see cref="MainViewModel"/> class.
@@ -71,7 +73,10 @@ namespace CommitAs.ViewModels
                 return;
             }
 
-            this.CurrentUser = this.Settings.Users.FirstOrDefault(u => u.Name == userName);
+            var user = this.Settings.Users.FirstOrDefault(u => u.Name == userName);
+            user ??= this.Settings.AddUser(new User(userName));
+
+            this.CurrentUser = user;
         }
 
         /// <summary>
@@ -80,14 +85,14 @@ namespace CommitAs.ViewModels
         /// <returns>True if everything went well.</returns>
         public bool WriteCurrentUserToGit()
         {
-            if (string.IsNullOrEmpty(this.Settings.Command) ||
+            if (string.IsNullOrEmpty(this.Settings.CommandConfigUserName) ||
                 this.CurrentUser == null)
             {
                 return false;
             }
 
             return Git.WriteUserToGit(
-                this.Settings.Command,
+                this.Settings,
                 this.CurrentUser.Name,
                 string.IsNullOrWhiteSpace(this.CurrentUser.Email) ? this.Settings.Email : this.CurrentUser.Email);
         }

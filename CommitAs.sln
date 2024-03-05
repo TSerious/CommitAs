@@ -3,7 +3,22 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.9.34616.47
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CommitAs", "CommitAs.csproj", "{4ADE5C6C-9D4A-41EE-80EB-06C942B56C72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommitAs", "CommitAs\CommitAs.csproj", "{1DE63B63-F201-48CC-9A08-E9E8F59FE7E4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "CommitAs.Core", "CommitAs.Core\CommitAs.Core.csproj", "{9B9D4154-E9C4-4F6C-A621-1F2316DEA403}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PostCommitAs", "PostCommitAs\PostCommitAs.csproj", "{60EF3200-4CB4-4C86-950E-0CB5740D4D4C}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2A6EE502-9D87-42D3-9366-264C56524F25}"
+	ProjectSection(SolutionItems) = preProject
+		.editorconfig = .editorconfig
+		Directory.Build.props = Directory.Build.props
+		Icon-Design.svg = Icon-Design.svg
+		LICENSE = LICENSE
+		post-commit = post-commit
+		pre-commit = pre-commit
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,10 +26,18 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{4ADE5C6C-9D4A-41EE-80EB-06C942B56C72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{4ADE5C6C-9D4A-41EE-80EB-06C942B56C72}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{4ADE5C6C-9D4A-41EE-80EB-06C942B56C72}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{4ADE5C6C-9D4A-41EE-80EB-06C942B56C72}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1DE63B63-F201-48CC-9A08-E9E8F59FE7E4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1DE63B63-F201-48CC-9A08-E9E8F59FE7E4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1DE63B63-F201-48CC-9A08-E9E8F59FE7E4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1DE63B63-F201-48CC-9A08-E9E8F59FE7E4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{9B9D4154-E9C4-4F6C-A621-1F2316DEA403}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9B9D4154-E9C4-4F6C-A621-1F2316DEA403}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9B9D4154-E9C4-4F6C-A621-1F2316DEA403}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9B9D4154-E9C4-4F6C-A621-1F2316DEA403}.Release|Any CPU.Build.0 = Release|Any CPU
+		{60EF3200-4CB4-4C86-950E-0CB5740D4D4C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{60EF3200-4CB4-4C86-950E-0CB5740D4D4C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{60EF3200-4CB4-4C86-950E-0CB5740D4D4C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{60EF3200-4CB4-4C86-950E-0CB5740D4D4C}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
